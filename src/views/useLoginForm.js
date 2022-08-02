@@ -10,36 +10,32 @@ export const pwdLoginForm = (formRef) => {
   });
   // 表单校验规则
   const rules = {
-    email: [
-      {
-        required: true,
-        validator(rule, value) {
-          if (!value) {
-            return new Error('请输入邮箱');
-          }
-          if (!emailRegExp.test(value)) {
-            return new Error('邮箱格式错误');
-          }
-          return true;
-        },
-        trigger: 'blur'
-      }
-    ],
-    password: [
-      {
-        required: true,
-        validator(rule, value) {
-          if (!value) {
-            return new Error('请输入密码');
-          }
-          if (!passwordRegExp.test(value)) {
-            return new Error('密码格式错误: 支持8-15个 "数字 字母 _ . @"');
-          }
-          return true;
-        },
-        trigger: 'blur'
-      }
-    ]
+    email: {
+      required: true,
+      validator(rule, value) {
+        if (!value) {
+          return new Error('请输入邮箱');
+        }
+        if (!emailRegExp.test(value)) {
+          return new Error('邮箱格式错误');
+        }
+        return true;
+      },
+      trigger: 'blur'
+    },
+    password: {
+      required: true,
+      validator(rule, value) {
+        if (!value) {
+          return new Error('请输入密码');
+        }
+        if (!passwordRegExp.test(value)) {
+          return new Error('密码格式错误: 支持8-15个 "数字 字母 _ . @"');
+        }
+        return true;
+      },
+      trigger: 'blur'
+    }
   };
   // 登录
   const login = async (callback) => {

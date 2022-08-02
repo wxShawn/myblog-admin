@@ -17,6 +17,11 @@ const routes = [
         name: 'ArticleList',
         component: () => import('../views/articles/ArticleList.vue'),
       },
+      {
+        path: '/article-category',
+        name: 'ArticleCategory',
+        component: () => import('../views/articles/ArticleCategory.vue'),
+      },
     ],
   },
 ];
