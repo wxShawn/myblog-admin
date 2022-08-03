@@ -1,10 +1,45 @@
 <template>
   <n-layout has-sider style="height: 100%;">
-    <n-layout-sider bordered :width="220">
-      <n-menu accordion :options="menuOptions"></n-menu>
+    <n-layout-sider
+      bordered
+      :width="220"
+      collapse-mode="width"
+      :collapsed-width="60"
+      :collapsed="collapsed"
+      @collapse="collapsed = true"
+      @expand="collapsed = false"
+    >
+      <!-- 菜单 -->
+      <n-menu
+        accordion
+        :options="menuOptions"
+        :collapsed="collapsed"
+        :collapsed-width="60"
+        :collapsed-icon-size="22"
+      ></n-menu>
     </n-layout-sider>
     <n-layout>
-      <n-layout-header bordered style="height: 60px;"></n-layout-header>
+      <n-layout-header
+        bordered
+        style="position: relative; 
+        padding: 0 24px;
+        height: 60px;
+        display: flex; align-items: center;"
+      >
+        <!-- 控制折叠菜单的按钮 -->
+        <n-button
+          @click="collapsed = !collapsed"
+          text
+          style="margin-right: 20px;
+          font-size: 24px"
+        >
+          <n-icon><menu-filled /></n-icon>
+        </n-button>
+        <!-- 面包屑 -->
+        <breadcrumb />
+        <!-- 个人资料 -->
+        <profile style="position: absolute; right: 40px; height: 100%;" />
+      </n-layout-header>
       <n-layout-content
         position="absolute"
         embedded
@@ -13,13 +48,17 @@
       >
         <router-view></router-view>
       </n-layout-content>
-      <n-layout-footer position="absolute" bordered style="height: 60px; background: #efeff5;"></n-layout-footer>
+      <n-layout-footer
+        position="absolute"
+        bordered style="height: 60px; background: #efeff5;"
+      >
+      </n-layout-footer>
     </n-layout>
   </n-layout>
 </template>
 
 <script setup>
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import {
   NLayout,
@@ -29,11 +68,24 @@ import {
   NLayoutContent,
   NMenu,
   NIcon,
+  NButton,
 } from 'naive-ui';
 import {
   ArticleOutlined,
   PermMediaOutlined,
+  ListAltOutlined,
+  ClassOutlined,
+  ImageOutlined,
+  AudioFileOutlined,
+  VideoFileOutlined,
+  MenuFilled,
 } from '@vicons/material';
+
+import Breadcrumb from './components/Breadcrumb.vue';
+import Profile from './components/Profile.vue';
+
+// 折叠菜单
+const collapsed = ref(false);
 
 // 渲染 n-icon
 const renderIcon = (icon) => {
@@ -59,10 +111,12 @@ const menuOptions = [
       {
         label: renderLink('文章列表', 'ArticleList'),
         key: 'articleList',
+        icon: renderIcon(ListAltOutlined),
       },
       {
         label: renderLink('文章分类', 'ArticleCategory'),
         key: 'articleCategory',
+        icon: renderIcon(ClassOutlined),
       }
     ]
   },
@@ -72,12 +126,19 @@ const menuOptions = [
     icon: renderIcon(PermMediaOutlined),
     children: [
       {
-        label: '图片列表',
-        key: 'beverage',
+        label: renderLink('图片列表', 'ImageList'),
+        key: 'imageList',
+        icon: renderIcon(ImageOutlined),
       },
       {
-        label: '音频列表',
-        key: 'beverage',
+        label: renderLink('音频列表', 'AudioList'),
+        key: 'audioList',
+        icon: renderIcon(AudioFileOutlined),
+      },
+      {
+        label: renderLink('视频列表', 'VideoList'),
+        key: 'videoList',
+        icon: renderIcon(VideoFileOutlined),
       }
     ]
   }
@@ -86,5 +147,4 @@ const menuOptions = [
 </script>
 
 <style lang="scss">
-
 </style>

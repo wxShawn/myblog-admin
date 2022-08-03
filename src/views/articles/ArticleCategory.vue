@@ -7,7 +7,7 @@
       :model="searchForm.formValue"
       :rules="searchForm.rules"
     >
-      <n-form-item label="名称" path="name">
+      <n-form-item label="分类名称" path="name">
         <n-input v-model:value="searchForm.formValue.name" />
       </n-form-item>
       <n-form-item>
@@ -33,7 +33,6 @@ import {
   NForm,
   NFormItem,
   NInput,
-  NSelect,
   NButton,
   NDataTable,
 } from 'naive-ui';
@@ -42,7 +41,7 @@ import useCategoriesSearchForm from './hooks/useCategoriesSearchForm'
 import useCategoriesDataTable from './hooks/useCategoriesDataTable';
 
 /**
- * 类别查询表单
+ * 分类查询表单
  */
 const searchFormRef = ref(null);
 const searchForm = useCategoriesSearchForm(searchFormRef);
@@ -53,7 +52,7 @@ const searchClickHandle = () => {
 }
 
 /**
- * 类别列表
+ * 分类列表
  */
 const dataTable = useCategoriesDataTable();
 
