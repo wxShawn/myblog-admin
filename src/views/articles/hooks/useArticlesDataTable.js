@@ -29,12 +29,14 @@ export default () => {
       render(row) {
         return [
           h(NButton, {
-            style: 'margin-right: 14px',
+            ghost: true,
+            style: 'margin-right: 12px',
             type: 'info',
             size: 'small',
             onClick: () => console.log('click 编辑')
           }, { default:() => '编辑' }),
           h(NButton, {
+            ghost: true,
             type: 'error',
             size: 'small',
             onClick: () => console.log('click 删除')

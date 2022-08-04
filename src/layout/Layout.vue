@@ -24,21 +24,30 @@
         style="position: relative; 
         padding: 0 24px;
         height: 60px;
-        display: flex; align-items: center;"
+        display: flex;
+        justify-content: space-between;
+        align-items: center;"
       >
-        <!-- 控制折叠菜单的按钮 -->
-        <n-button
-          @click="collapsed = !collapsed"
-          text
-          style="margin-right: 20px;
-          font-size: 24px"
-        >
-          <n-icon><menu-filled /></n-icon>
-        </n-button>
-        <!-- 面包屑 -->
-        <breadcrumb />
-        <!-- 个人资料 -->
-        <profile style="position: absolute; right: 40px; height: 100%;" />
+        <!-- header左侧 -->
+        <div style="display: flex; align-items: center;">
+          <!-- 控制折叠菜单的按钮 -->
+          <n-button
+            @click="collapsed = !collapsed"
+            text
+            style="margin-right: 20px;
+            font-size: 24px"
+          ><n-icon><menu-filled /></n-icon></n-button>
+          <!-- 面包屑 -->
+          <breadcrumb />
+        </div>
+
+        <!-- header右侧 -->
+        <div style="display: flex; align-items: center;">
+          <!-- 全屏显示 -->
+          <div style="margin-right: 20px; height: 30px;"><fullscreen /></div>
+          <!-- 个人资料 -->
+          <profile />
+        </div>
       </n-layout-header>
       <n-layout-content
         position="absolute"
@@ -83,6 +92,7 @@ import {
 
 import Breadcrumb from './components/Breadcrumb.vue';
 import Profile from './components/Profile.vue';
+import Fullscreen from './components/Fullscreen.vue';
 
 // 折叠菜单
 const collapsed = ref(false);

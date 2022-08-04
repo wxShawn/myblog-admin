@@ -22,7 +22,7 @@
           <img class="cover" :src="img.url" :alt="img.title">
           <n-checkbox class="checkbox"></n-checkbox>
           <div class="info">
-            <div><b>{{ img.title }}</b></div>
+            <div><b>{{ img.name }}</b></div>
             <div>{{ img.size }}</div>
           </div>
         </n-card>
@@ -47,32 +47,32 @@ import {
 const tempList = [
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片1',
+    name: '测试图片1',
     size: '2.3m',
   },
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片2',
+    name: '测试图片2',
     size: '5m',
   },
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片3',
+    name: '测试图片3',
     size: '0.9m',
   },
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片4',
+    name: '测试图片4',
     size: '3.5m',
   },
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片5',
+    name: '测试图片5',
     size: '1.1m',
   },
   {
     url: 'http://101.34.29.143:1337/uploads/thumbnail_cities_skylines_screenshot_10_d5e47748d0.jpg?width=1920&height=1080',
-    title: '测试图片6',
+    name: '测试图片6',
     size: '1.5m',
   },
 ]
