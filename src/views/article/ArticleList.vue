@@ -31,6 +31,7 @@
       :columns="dataTable.columns" 
       :data="dataTable.articleData" 
       :pagination="dataTable.pagination"
+      :loading="dataTable.loading.value"
     ></n-data-table>
   </n-card>
 
@@ -62,16 +63,32 @@ const searchFormRef = ref(null);
 const searchForm = useArticlesSearchForm(searchFormRef);
 // 查询按钮点击
 const searchClickHandle = () => {
-  searchForm.search((title, categoryId) => {
-    // 获取新数据
-    dataTable.getData(title, categoryId);
-  });
+  if (!dataTable.loading.value) {
+    dataTable.loading.value = true;
+    searchForm.search(async (title, categoryId) => {
+      // 获取新数据
+      await dataTable.getData(title, categoryId);
+      dataTable.loading.value = false;
+    });
+  }
 }
 
 /**
  * 博客列表
  */
 const dataTable = useArticlesDataTable(nMessage);
+
+// 分页事件触发
+dataTable.paginationAction.change = () => {
+  if (!dataTable.loading.value) {
+    dataTable.loading.value = true;
+    searchForm.search(async (title, categoryId) => {
+      // 获取新数据
+      await dataTable.getData(title, categoryId);
+      dataTable.loading.value = false;
+    });
+  }
+}
 
 </script>
 

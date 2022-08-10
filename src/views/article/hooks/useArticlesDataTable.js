@@ -1,10 +1,11 @@
-import { h, onBeforeMount, reactive } from "vue"
+import { h, onBeforeMount, reactive, ref } from "vue"
 import { NButton, NSwitch } from "naive-ui"
 import api from '../../../api';
 
 export default (nMessage) => {
   // 表头
   const columns = [
+    { title: '#', key: 'index' },
     { title: '标题', key: 'title' },
     { title: '类别', key: 'category' },
     { title: '浏览量', key: 'pageviews' },
@@ -44,7 +45,10 @@ export default (nMessage) => {
             type: 'error',
             size: 'small',
             onClick: async () => {
-              
+              const data = await api.article.delete(row.id);
+              if (data.code === 0) {
+                nMessage.success(data.msg);
+              }
             }
           }, { default:() => '删除' }),
         ];
@@ -54,6 +58,13 @@ export default (nMessage) => {
 
   // 数据
   const articleData = reactive([]);
+
+  const loading = ref(false);
+
+  // 分页事件，暴露给外部使用
+  const paginationAction = reactive({
+    change() {},
+  });
 
   // 分页
   const pagination = reactive({
@@ -69,11 +80,13 @@ export default (nMessage) => {
     // 切换页时触发
     onChange(page) {
       pagination.page = page;
+      paginationAction.change();
     },
     // 更改分页大小时触发
     onUpdatePageSize(pageSize) {
       pagination.pageSize = pageSize;
       pagination.page = 1;
+      paginationAction.change();
     }
   });
 
@@ -88,7 +101,8 @@ export default (nMessage) => {
       for (let i = 0, len = rows.length; i < len; i++) {
         const createdAt = new Date(rows[i].createdAt).toLocaleString();
         const updatedAt = new Date(rows[i].updatedAt).toLocaleString();
-        articleData.push({ 
+        articleData.push({
+          index: (page - 1) * pageSize + i + 1, 
           id: rows[i].id,
           title: rows[i].title,
           category: rows[i].blog_category.name,
@@ -110,5 +124,7 @@ export default (nMessage) => {
     articleData,
     pagination,
     getData,
+    paginationAction,
+    loading,
   }
 }

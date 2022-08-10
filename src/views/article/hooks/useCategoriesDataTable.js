@@ -44,7 +44,7 @@ export default () => {
     showSizePicker: true,
     pageSizes: [{ label: '10/页', value: 10 }, { label: '20/页', value: 20 }, { label: '30/页', value: 30 }],
     prefix() {
-      return `共 ${pagination.itemCount} 个类别`
+      return `共 ${pagination.itemCount} 个分类`
     },
     // 切换页时触发
     onChange(page) {
