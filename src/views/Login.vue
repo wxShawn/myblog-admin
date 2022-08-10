@@ -1,8 +1,11 @@
 <template>
   <div class="login-container">
     <n-grid class="login" :cols="5">
-      <n-gi :span="3">image</n-gi>
-      <n-gi :span="2">
+      <n-gi :span="3">
+        <img style="height: 400px" src="../assets/Content_Creation_Outline.svg">
+      </n-gi>
+      <n-gi :span="2" class="login-form-container">
+        <div class="login-title">Shawn's Blog 管理后台</div>
         <n-tabs
           type="line"
           default-value="vcLogin"
@@ -13,13 +16,17 @@
           <n-tab-pane name="vcLogin" tab="验证码登录">
             <n-form
               ref="vcFormRef"
-              :label-width="80"
+              :show-label="false"
               :model="vcForm.formValue"
               :rules="vcForm.rules"
               size="large"
             >
               <n-form-item ref="vcFormEmailRef" label="邮箱" path="email">
-                <n-input v-model:value="vcForm.formValue.email" placeholder="请输入邮箱" />
+                <n-input v-model:value="vcForm.formValue.email" placeholder="请输入邮箱">
+                  <template #prefix>
+                    <n-icon :component="EmailFilled" />
+                  </template>
+                </n-input>
               </n-form-item>
               <n-form-item label="验证码" path="verifyCode">
                 <div style="display: flex; width: 100%;">
@@ -27,7 +34,11 @@
                     style="flex: 1; margin-right: 20px;"
                     v-model:value="vcForm.formValue.verifyCode"
                     placeholder="请输入验证码"
-                  />
+                  >
+                    <template #prefix>
+                      <n-icon :component="VerifiedUserFilled" />
+                    </template>
+                  </n-input>
                   <n-button
                     :disabled="verifyCodeBtnDisabled"
                     @click="getVerifyCode"
@@ -45,7 +56,7 @@
                 </div>
               </n-form-item>
               <n-form-item>
-                <n-button attr-type="button" @click="vcLoginHandle">
+                <n-button secondary type="primary" class="login-btn" @click="vcLoginHandle">
                   登录
                 </n-button>
               </n-form-item>
@@ -56,19 +67,27 @@
           <n-tab-pane name="pwdLogin" tab="密码登录">
             <n-form
               ref="pwdFormRef"
-              :label-width="80"
+              :show-label="false"
               :model="pwdForm.formValue"
               :rules="pwdForm.rules"
               size="large"
             >
               <n-form-item label="邮箱" path="email">
-                <n-input v-model:value="pwdForm.formValue.email" placeholder="请输入邮箱" />
+                <n-input v-model:value="pwdForm.formValue.email" placeholder="请输入邮箱">
+                  <template #prefix>
+                    <n-icon :component="EmailFilled" />
+                  </template>
+                </n-input>
               </n-form-item>
               <n-form-item label="密码" path="password">
-                <n-input v-model:value="pwdForm.formValue.password" placeholder="请输入密码" />
+                <n-input v-model:value="pwdForm.formValue.password" placeholder="请输入密码">
+                  <template #prefix>
+                    <n-icon :component="LockFilled" />
+                  </template>
+                </n-input>
               </n-form-item>
               <n-form-item>
-                <n-button attr-type="button" @click="pwdLoginHandle">
+                <n-button secondary type="primary" class="login-btn" @click="pwdLoginHandle">
                   登录
                 </n-button>
               </n-form-item>
@@ -95,7 +114,13 @@ import {
   NInput,
   NCountdown,
   useMessage,
+  NIcon,
 } from 'naive-ui';
+import {
+  LockFilled,
+  EmailFilled,
+  VerifiedUserFilled,
+} from '@vicons/material';
 
 import api from '../api';
 import router from '../router';
@@ -155,7 +180,7 @@ const getVerifyCode = async () => {
   // 发送请求
   const { data } = await api.admin.getLoginVerifyCode(vcForm.formValue.email);
   if (data.code === 0) {
-    nMessage.success(data.message);
+    nMessage.success(data.msg);
     verifyCodeBtnDisabled.value = true;
   }
 };
@@ -168,15 +193,33 @@ const renderCountdown = ({ hours, minutes, seconds }) => {
 <style lang="scss">
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
-
   
   .login {
     position: relative;
     max-width: 1000px;
     min-width: 800px;
+
+    .login-form-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .login-title {
+        margin-bottom: 20px;
+        width: 100%;
+        color: #36ad6a;
+        font-size: 32px;
+      }
+    }
+    
+    .login-btn {
+      width: 100%;
+    }
   }
 }
 
