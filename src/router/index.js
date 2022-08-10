@@ -9,11 +9,11 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    redirect: { name: 'Articles' },
+    redirect: { name: 'Article' },
   },
   {
-    path: '/articles',
-    name: 'Articles',
+    path: '/article',
+    name: 'Article',
     component: () => import('../layout/Layout.vue'),
     redirect: { name: 'ArticleList' },
     meta: { title: '文章管理' },
@@ -21,13 +21,13 @@ const routes = [
       {
         path: 'article-list',
         name: 'ArticleList',
-        component: () => import('../views/articles/ArticleList.vue'),
+        component: () => import('../views/article/ArticleList.vue'),
         meta: { title: '文章列表' },
       },
       {
         path: 'article-category',
         name: 'ArticleCategory',
-        component: () => import('../views/articles/ArticleCategory.vue'),
+        component: () => import('../views/article/ArticleCategory.vue'),
         meta: { title: '分类列表' },
       },
     ],
