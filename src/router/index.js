@@ -73,6 +73,15 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-})
+});
+
+// 导航守卫
+router.beforeEach((to, from) => {
+  // 检查 json web token 是否存在，否则跳转到 Login 页面
+  const jwt = sessionStorage.getItem('jwt');
+  if (to.name !== 'Login' && !jwt) {
+    return {name: 'Login'};
+  }
+});
 
 export default router;
