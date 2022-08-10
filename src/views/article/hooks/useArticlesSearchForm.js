@@ -1,4 +1,5 @@
-import { reactive } from "vue";
+import { onBeforeMount, reactive } from "vue";
+import api from '../../../api';
 
 export default (formRef) => {
   // 表单数据
@@ -11,9 +12,6 @@ export default (formRef) => {
   const rules = {
     category: {
       validator(rule, value) {
-        // if (!value) {
-        //   return new Error('请输入邮箱');
-        // }
         if (typeof value != 'number') {
           return new Error('分类ID格式错误');
         }
@@ -24,12 +22,9 @@ export default (formRef) => {
   };
 
   // 选择器选项
-  const categoryOptions = [
+  const categoryOptions = reactive([
     { label: '全部', value: 0 },
-    { label: '前端', value: 1 },
-    { label: '服务端', value: 2 },
-    { label: '数据库', value: 3 },
-  ];
+  ]);
 
   // 重置表单
   const reset = () => {
@@ -41,10 +36,29 @@ export default (formRef) => {
 
   // 查询
   const search = async (callback) => {
-    // 发送 ajax 请求
-    /** ajax... */
-    callback('服务器返回的数据');
+    try {
+      await formRef.value.validate();
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+    callback(formValue.title, formValue.category);
   }
+
+  // 获取分类列表
+  const getCategoryList = async () => {
+    const data = await api.category.findAll();
+    if (data.code === 0) {
+      const { rows } = data.result;
+      for (let i = 0, len = rows.length; i < len; i++) {
+        categoryOptions.push({ label: rows[i].name, value: rows[i].id });
+      }
+    }
+  }
+
+  onBeforeMount(() => {
+    getCategoryList();
+  });
 
   return {
     formValue,

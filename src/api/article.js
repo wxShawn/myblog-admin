@@ -32,7 +32,7 @@ export default {
   updatePublishState(id, isPublish) {
     return request({
       method: 'patch',
-      url: `${prefix}/${id}`,
+      url: `${prefix}/${id}/isPublish`,
       data: { isPublish }
     });
   },

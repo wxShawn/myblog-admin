@@ -1,6 +1,5 @@
 import { reactive } from 'vue';
 import paramsValidator from '../utils/paramsValidator';
-import { emailRegExp, passwordRegExp, verifyCodeRegexp } from '../utils/regexp';
 import api from '../api';
 
 // 密码登录表单
@@ -51,7 +50,7 @@ export const pwdLoginForm = (formRef) => {
       return false;
     }
     // 发送登录请求
-    const { data } = await api.admin.loginByPassword(formValue.email, formValue.password);
+    const data = await api.admin.loginByPassword(formValue.email, formValue.password);
     if (data.code === 0) {
       callback(data);
     }
@@ -112,7 +111,7 @@ export const vcLoginForm = (formRef) => {
       return false;
     }
     // 发送登录请求
-    const { data } = await api.admin.loginByVerifyCode(formValue.email, formValue.verifyCode);
+    const data = await api.admin.loginByVerifyCode(formValue.email, formValue.verifyCode);
     if (data.code === 0) {
       callback(data);
     }

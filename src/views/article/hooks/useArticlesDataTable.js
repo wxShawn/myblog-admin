@@ -1,8 +1,8 @@
 import { h, onBeforeMount, reactive } from "vue"
 import { NButton, NSwitch } from "naive-ui"
+import api from '../../../api';
 
-
-export default () => {
+export default (nMessage) => {
   // 表头
   const columns = [
     { title: '标题', key: 'title' },
@@ -17,8 +17,12 @@ export default () => {
         return h(NSwitch, {
           value: row.isPublish,
           // NSwitch 值改变时触发的回调
-          "onUpdate:value": (value) => {
+          "onUpdate:value": async (value) => {
             row.isPublish = value;
+            const data = await api.article.updatePublishState(row.id, value);
+            if (data.code === 0) {
+              nMessage.success(data.msg);
+            }
           }
         });
       }
@@ -39,7 +43,9 @@ export default () => {
             ghost: true,
             type: 'error',
             size: 'small',
-            onClick: () => console.log('click 删除')
+            onClick: async () => {
+              
+            }
           }, { default:() => '删除' }),
         ];
       }
@@ -47,11 +53,7 @@ export default () => {
   ];
 
   // 数据
-  const data = reactive([
-    { title: '文章1', category: '前端', pageviews: '10', createdAt: '2022-01-01', updatedAt: '2022-01-01', isPublish: false },
-    { title: '文章2', category: '前端', pageviews: '999', createdAt: '2022-01-02', updatedAt: '2022-01-02', isPublish: false },
-    { title: '文章3', category: '前端', pageviews: '360', createdAt: '2022-01-03', updatedAt: '2022-01-03', isPublish: true },
-  ]);
+  const articleData = reactive([]);
 
   // 分页
   const pagination = reactive({
@@ -75,10 +77,38 @@ export default () => {
     }
   });
 
+  // 获取数据
+  const getData = async (title, categoryId) => {
+    const { page, pageSize } = pagination;
+    const data = await api.article.findAll(page, pageSize, title, categoryId);
+    if (data.code === 0) {
+      const { count, rows } = data.result;
+      pagination.itemCount = count;
+      articleData.length = 0;
+      for (let i = 0, len = rows.length; i < len; i++) {
+        const createdAt = new Date(rows[i].createdAt).toLocaleString();
+        const updatedAt = new Date(rows[i].updatedAt).toLocaleString();
+        articleData.push({ 
+          id: rows[i].id,
+          title: rows[i].title,
+          category: rows[i].blog_category.name,
+          pageviews: 99,
+          createdAt,
+          updatedAt,
+          isPublish: rows[i].isPublish,
+        });
+      }
+    }
+  }
+
+  onBeforeMount(() => {
+    getData();
+  });
 
   return {
     columns,
-    data,
+    articleData,
     pagination,
+    getData,
   }
 }

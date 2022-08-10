@@ -29,7 +29,7 @@
     <n-data-table 
       remote 
       :columns="dataTable.columns" 
-      :data="dataTable.data" 
+      :data="dataTable.articleData" 
       :pagination="dataTable.pagination"
     ></n-data-table>
   </n-card>
@@ -47,10 +47,14 @@ import {
   NSelect,
   NButton,
   NDataTable,
+  useMessage,
 } from 'naive-ui';
 
 import useArticlesSearchForm from './hooks/useArticlesSearchForm';
 import useArticlesDataTable from './hooks/useArticlesDataTable';
+
+const nMessage = useMessage();
+
 /**
  * 博客筛选表单
  */
@@ -58,15 +62,16 @@ const searchFormRef = ref(null);
 const searchForm = useArticlesSearchForm(searchFormRef);
 // 查询按钮点击
 const searchClickHandle = () => {
-  searchForm.search(data => {
-    console.log(data);
+  searchForm.search((title, categoryId) => {
+    // 获取新数据
+    dataTable.getData(title, categoryId);
   });
 }
 
 /**
  * 博客列表
  */
-const dataTable = useArticlesDataTable();
+const dataTable = useArticlesDataTable(nMessage);
 
 </script>
 

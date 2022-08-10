@@ -133,7 +133,7 @@ const nMessage = useMessage();
 const loginSuccess = (data) => {
   nMessage.success(data.msg);
   sessionStorage.setItem('jwt', data.result.jwt);
-  console.log(`${data.result.adminInfo.admin_name}，你好， 欢迎回来！`);
+  console.log(`${data.result.adminInfo.name}，你好， 欢迎回来！`);
   router.push({name: 'Home'});
 }
  
@@ -178,7 +178,7 @@ const getVerifyCode = async () => {
   }
   verifyCodeBtnDisabled.value = true;
   // 发送请求
-  const { data } = await api.admin.getLoginVerifyCode(vcForm.formValue.email);
+  const data = await api.admin.getLoginVerifyCode(vcForm.formValue.email);
   if (data.code === 0) {
     nMessage.success(data.msg);
     verifyCodeBtnDisabled.value = true;
