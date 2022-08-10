@@ -30,6 +30,12 @@ const routes = [
         component: () => import('../views/article/ArticleCategory.vue'),
         meta: { title: '分类列表' },
       },
+      {
+        path: 'create-article',
+        name: 'CreateArticle',
+        component: () => import('../views/article/CreateArticle.vue'),
+        meta: { title: '创建文章' },
+      },
     ],
   },
   {

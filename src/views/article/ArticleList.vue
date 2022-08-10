@@ -22,7 +22,7 @@
         <n-button type="info" @click="searchClickHandle">查询</n-button>
       </n-form-item>
       <n-form-item>
-        <n-button type="primary" @click="">添加文章</n-button>
+        <n-button type="primary" @click="goToCreateArticle">添加文章</n-button>
       </n-form-item>
     </n-form>
     
@@ -51,6 +51,7 @@ import {
   useMessage,
 } from 'naive-ui';
 
+import router from '../../router';
 import useArticlesSearchForm from './hooks/useArticlesSearchForm';
 import useArticlesDataTable from './hooks/useArticlesDataTable';
 
@@ -88,6 +89,13 @@ dataTable.paginationAction.change = () => {
       dataTable.loading.value = false;
     });
   }
+}
+
+/**
+ * 其他
+ */
+const goToCreateArticle = () => {
+  router.push({ name: 'CreateArticle' });
 }
 
 </script>

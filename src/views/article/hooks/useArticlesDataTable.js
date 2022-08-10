@@ -7,7 +7,7 @@ export default (nMessage) => {
   const columns = [
     { title: '#', key: 'index' },
     { title: '标题', key: 'title' },
-    { title: '类别', key: 'category' },
+    { title: '分类', key: 'category' },
     { title: '浏览量', key: 'pageviews' },
     { title: '创建时间', key: 'createdAt' },
     { title: '更新时间', key: 'updatedAt' },
