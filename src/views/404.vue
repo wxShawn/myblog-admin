@@ -16,7 +16,7 @@ import {
 import router from '../router';
 
 const gotoHome = () => {
-  router.push({ name: 'Articles' });
+  router.push({ name: 'Home' });
 }
 </script>
 

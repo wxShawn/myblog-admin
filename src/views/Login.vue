@@ -94,9 +94,23 @@ import {
   NButton,
   NInput,
   NCountdown,
+  useMessage,
 } from 'naive-ui';
 
+import api from '../api';
+import router from '../router';
 import { pwdLoginForm, vcLoginForm } from './useLoginForm';
+
+// naive ui 消息组件
+const nMessage = useMessage();
+
+// 登录成功
+const loginSuccess = (data) => {
+  nMessage.success(data.msg);
+  sessionStorage.setItem('jwt', data.result.jwt);
+  console.log(`${data.result.adminInfo.admin_name}，你好， 欢迎回来！`);
+  router.push({name: 'Home'});
+}
  
 /**
  * 密码登录
@@ -106,7 +120,8 @@ const pwdForm = pwdLoginForm(pwdFormRef);
 const pwdLoginHandle = () => {
   // 登录成功将会执行回调函数
   pwdForm.login(data => {
-
+    console.log(data);
+    loginSuccess(data);
   });
 }
 
@@ -118,11 +133,12 @@ const vcForm = vcLoginForm(vcFormRef);
 const vcLoginHandle = () => {
   // 登录成功将会执行回调函数
   vcForm.login(data => {
-
+    console.log(data);
+    loginSuccess(data);
   });
 }
 
-// 邮箱表单项的表示
+// 邮箱表单项的标识
 const vcFormEmailRef = ref(null);
 // 是否禁用“获取”按钮
 const verifyCodeBtnDisabled = ref(false);
@@ -137,11 +153,11 @@ const getVerifyCode = async () => {
   }
   verifyCodeBtnDisabled.value = true;
   // 发送请求
-  // const { data } = await api.admin.getLoginVerifyCode({ email: vcUser.email });
-  // if (data.code === 0) {
-  //   nMessage.success(data.message);
-  //   verifyCodeBtnDisabled.value = true;
-  // }
+  const { data } = await api.admin.getLoginVerifyCode(vcForm.formValue.email);
+  if (data.code === 0) {
+    nMessage.success(data.message);
+    verifyCodeBtnDisabled.value = true;
+  }
 };
 // 验证码获取按钮的倒计时渲染
 const renderCountdown = ({ hours, minutes, seconds }) => {

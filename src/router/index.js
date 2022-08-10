@@ -7,6 +7,11 @@ const routes = [
     component: () => import('../views/Login.vue'),
   },
   {
+    path: '/home',
+    name: 'Home',
+    redirect: { name: 'Articles' },
+  },
+  {
     path: '/articles',
     name: 'Articles',
     component: () => import('../layout/Layout.vue'),
