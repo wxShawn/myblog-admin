@@ -6,21 +6,13 @@ export default (formRef) => {
     name: '',
   });
 
-  // 表单规则
-  const rules = {
-    
-  };
-
   // 查询
   const search = async (callback) => {
-    // 发送 ajax 请求
-    /** ajax... */
-    callback('服务器返回的数据');
+    callback(formValue.name);
   }
 
   return {
     formValue,
-    rules,
     search,
   }
 }

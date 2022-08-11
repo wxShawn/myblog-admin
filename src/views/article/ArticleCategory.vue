@@ -5,7 +5,6 @@
       inline
       :label-width="80"
       :model="searchForm.formValue"
-      :rules="searchForm.rules"
     >
       <n-form-item label="分类名称" path="name">
         <n-input v-model:value="searchForm.formValue.name" />
@@ -20,8 +19,9 @@
     <n-data-table 
       remote 
       :columns="dataTable.columns" 
-      :data="dataTable.data"
+      :data="dataTable.categoryData"
       :pagination="dataTable.pagination"
+      :loading="dataTable.loading.value"
     ></n-data-table>
   </n-card>
 </template>
@@ -46,16 +46,20 @@ import useCategoriesDataTable from './hooks/useCategoriesDataTable';
 const searchFormRef = ref(null);
 const searchForm = useCategoriesSearchForm(searchFormRef);
 const searchClickHandle = () => {
-  searchForm.search(data => {
-    console.log(data);
-  })
+  searchForm.search(async (categoryName) => {
+    dataTable.getData(categoryName);
+  });
 }
 
 /**
  * 分类列表
  */
 const dataTable = useCategoriesDataTable();
-
+dataTable.paginationAction.change = () => {
+  searchForm.search(async (categoryName) => {
+    dataTable.getData(categoryName);
+  });
+}
 </script>
 
 <style lang="scss">
