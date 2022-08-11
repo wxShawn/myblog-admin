@@ -15,6 +15,10 @@ export default (el = document) => {
     }
   }
 
+  window.onresize = () => {
+    isOpen.value = el.fullscreenElement ? true : false;
+  }
+
   return {
     isOpen,
     openOrClose,
