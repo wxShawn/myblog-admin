@@ -19,6 +19,14 @@ export default (el = document) => {
     isOpen.value = el.fullscreenElement ? true : false;
   }
 
+  window.onkeydown = (e) => {
+    if (e.code === 'F11') {
+      console.log(e.code);
+      openOrClose();
+      return false;
+    }
+  }
+
   return {
     isOpen,
     openOrClose,
