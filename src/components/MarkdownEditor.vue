@@ -49,7 +49,7 @@
       <!-- 分隔线 -->
       <div class="divider"></div>
       <!-- 标题 -->
-      <div style="color: #555;">{{ title ? title : '未命名' }}.md</div>
+      <div style="color: #555;">{{ markdown.title ? markdown.title : '未命名' }}.md</div>
     </div>
     <div ref="container" class="container">
       <textarea
@@ -82,9 +82,16 @@ const emit = defineEmits(['dataChange']);
  */
 // 数据
 const markdown = reactive({
-  text: data && data.text ? data.text : '',
+  title: '',
+  text: '',
   html: '',
 });
+
+if (data) {
+  watch(data, (newValue, oldValue) => {
+    markdown.text = newValue.text;
+  });
+}
 
 // 是否开启预览
 const showPreview = ref(true);
@@ -96,11 +103,23 @@ const fullscreen = ref(false);
 markdown.html = computed(() => {
   const html = marked(markdown.text);
   emit('dataChange', {
-    title: title.value ? title.value : '未命名',
+    title: markdown.title ? markdown.title : '未命名',
     text: markdown.text,
     html
   });
   return html;
+});
+
+// 获取标题
+markdown.title = computed(() => {
+  let t = '';
+  const list = markdown.text.split('\n');
+  for (let i = 0; i < list.length; i++) {
+    if (list[i][0] === '#' && list[i][1] === ' ') {
+      t = list[i].replace(/#\s+/, '');
+      return t;
+    }
+  }
 });
 
 // 元素标识
@@ -143,21 +162,6 @@ watch(fullscreen, (newValue, oldValue) => {
 onMounted(() => {
   dragChangeElementSize();
   textBox.value.focus();
-});
-
-/**
- * ********** 自动获取标题 **********
- */
-// 获取标题
-const title = computed(() => {
-  let t = '';
-  const list = markdown.text.split('\n');
-  for (let i = 0; i < list.length; i++) {
-    if (list[i][0] === '#' && list[i][1] === ' ') {
-      t = list[i].replace(/#\s+/, '');
-      return t;
-    }
-  }
 });
 
 /**

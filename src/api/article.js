@@ -20,11 +20,11 @@ export default {
   },
 
   // 更新文章
-  update(id, title, content, isPublish, categoryId) {
+  update(id, title, content, categoryId) {
     return request({
       method: 'put',
       url: `${prefix}/${id}`,
-      data: { title, content, isPublish, categoryId },
+      data: { title, content, categoryId },
     });
   },
 

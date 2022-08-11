@@ -1,6 +1,7 @@
 <template>
   <n-card>
     <n-form
+      ref="formRef"
       inline
       :model="formValue"
       :rules="rules"
@@ -30,7 +31,7 @@ import {
   useMessage,
   useDialog,
 } from 'naive-ui';
-import { onBeforeMount, reactive } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 
 import api from '../../api';
@@ -43,10 +44,10 @@ const nMessage = useMessage();
 const nDialog = useDialog();
 
 // 是否已提交数据
-let isPosted = false;
+let isChanged = true;
 // 离开路由前检测是否弹出对话框提醒
 onBeforeRouteLeave((to, from, next) => {
-  if (from.name === 'CreateArticle' && !isPosted) {
+  if (from.name === 'CreateArticle' && !isChanged) {
     nDialog.warning({
       title: "警告",
       content: "离开页面后数据将不会保存，确认离开？",
@@ -56,24 +57,33 @@ onBeforeRouteLeave((to, from, next) => {
         next();
       },
       onNegativeClick: () => {
-        // nothing
+        next(false);
       }
     });
+  } else {
+    next();
   }
 });
 
 // 文章数据
-const article = {
+const article = reactive({
   title: '',
   content: '',
-};
+});
+
+// 监听文章数据, 判断是否有内容
+watch(article, () => {
+  isChanged = article.content.length === 0 ? true : false;
+});
 
 // 编辑器数据改变事件处理
 const handleDataChange = (emitData) => {
-  console.log(emitData);
   article.title = emitData.title;
   article.content = emitData.text;
 }
+
+// 表单标识
+const formRef = ref(null);
 
 // 表单数据
 const formValue = reactive({
@@ -84,6 +94,13 @@ const formValue = reactive({
 const rules = {
   categoryId: {
     required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('请选择分类');
+      }
+      return true;
+    },
+    trigger: 'blur'
   }
 }
 
@@ -108,10 +125,16 @@ onBeforeMount(() => {
 
 // 创建文章
 const create = async () => {
+  try {
+    await formRef.value.validate();
+  } catch (error) {
+    console.warn(error);
+    return false;
+  }
   const data = await api.article.create(article.title, article.content, formValue.categoryId);
   if (data.code === 0) {
     nMessage.success(data.msg);
-    isPosted = true;
+    isChanged = true;
     router.push({ name: 'ArticleList' });
   }
 }

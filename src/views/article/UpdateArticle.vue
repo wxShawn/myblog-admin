@@ -13,10 +13,10 @@
         ></n-select>
       </n-form-item>
       <n-form-item>
-        <n-button type="primary" @click="create">上传</n-button>
+        <n-button type="primary" @click="update">更新</n-button>
       </n-form-item>
     </n-form>
-    <markdown-editor :data="mdData" style="height: 600px;" @data-change="handleDataChange" />
+    <markdown-editor :data="originData" style="height: 600px;" @data-change="handleDataChange" />
   </n-card>
 </template>
 
@@ -30,25 +30,23 @@ import {
   useMessage,
   useDialog,
 } from 'naive-ui';
-import { onBeforeMount, reactive } from 'vue';
+import { onBeforeMount, reactive, watch } from 'vue';
 import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
 import api from '../../api';
 import router from '../../router';
 import MarkdownEditor from '../../components/MarkdownEditor.vue';
 
-const articleId = useRoute().query.id;
-
 // naive ui 消息API
 const nMessage = useMessage();
 // naive ui 对话框API
 const nDialog = useDialog();
 
-// 是否已提交数据
-let isPosted = false;
+// 当前文章数据是否与原始数据相同
+let isChanged = true;
 // 离开路由前检测是否弹出对话框提醒
 onBeforeRouteLeave((to, from, next) => {
-  if (from.name === 'UpdateArticle' && !isPosted) {
+  if (from.name === 'UpdateArticle' && !isChanged) {
     nDialog.warning({
       title: "警告",
       content: "离开页面后数据将不会保存，确认离开？",
@@ -58,33 +56,35 @@ onBeforeRouteLeave((to, from, next) => {
         next();
       },
       onNegativeClick: () => {
-        // nothing
+        next(false);
       }
     });
+  } else {
+    next();
   }
 });
 
-const mdData = reactive({
+// 文章id
+const articleId = useRoute().query.id;
+
+// 原始文章数据
+const originData = reactive({
   text: '',
 });
 
-onBeforeMount(async () => {
-  const data = await api.article.findOne(articleId);
-  if (data.code === 0) {
-    mdData.text = data.result.content;
-    console.log(mdData.text, data.result.content);
-  }
+// 当前文章数据
+const article = reactive({
+  title: '',
+  content: originData.text,
 });
 
-// 文章数据
-const article = {
-  title: '',
-  content: '',
-};
+// 监听文章数据,判断其内容是否与原始数据相同
+watch(article, (newValue, oldValue) => {
+  isChanged = originData.text === article.content ? true : false;
+})
 
 // 编辑器数据改变事件处理
 const handleDataChange = (emitData) => {
-  console.log(emitData);
   article.title = emitData.title;
   article.content = emitData.text;
 }
@@ -115,17 +115,26 @@ const getCategoryList = async () => {
   }
 }
 
-// 组件挂载前获取分类列表
-onBeforeMount(() => {
+// 组件挂载前执行
+onBeforeMount(async () => {
+  // 获取分类列表
   getCategoryList();
+  // 获取文章信息
+  const data = await api.article.findOne(articleId);
+  if (data.code === 0) {
+    // 文章内容
+    originData.text = data.result.content;
+    // 文章分类ID
+    formValue.categoryId = data.result.blog_category.id;
+  }
 });
 
-// 创建文章
-const create = async () => {
-  const data = await api.article.create(article.title, article.content, formValue.categoryId);
+// 更新文章
+const update = async () => {
+  const data = await api.article.update(articleId, article.title, article.content, formValue.categoryId);
   if (data.code === 0) {
     nMessage.success(data.msg);
-    isPosted = true;
+    isChanged = true;
     router.push({ name: 'ArticleList' });
   }
 }
