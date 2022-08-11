@@ -3,7 +3,7 @@ import router from '../router';
 
 const request = axios.create({
   baseURL: 'http://127.0.0.1:3001', // 请求地址
-  timeout: 5000, // 请求最长时间，超时则失败
+  timeout: 10000, // 请求最长时间，超时则失败
 });
 
 // 添加请求拦截器

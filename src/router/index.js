@@ -36,6 +36,12 @@ const routes = [
         component: () => import('../views/article/CreateArticle.vue'),
         meta: { title: '创建文章' },
       },
+      {
+        path: 'update-article',
+        name: 'UpdateArticle',
+        component: () => import('../views/article/UpdateArticle.vue'),
+        meta: { title: '编辑文章' },
+      },
     ],
   },
   {

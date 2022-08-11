@@ -11,6 +11,8 @@
   "dependencies": {
     "@vicons/material": "^0.12.0",
     "axios": "^0.27.2",
+    "github-markdown-css": "^5.1.0",
+    "marked": "^4.0.18",
     "naive-ui": "^2.32.1",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"

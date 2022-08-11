@@ -1,5 +1,6 @@
-import { h, onBeforeMount, reactive, ref } from "vue"
-import { NButton, NSwitch } from "naive-ui"
+import { h, onBeforeMount, reactive, ref } from "vue";
+import { NButton, NSwitch } from "naive-ui";
+import router from '../../../router';
 import api from '../../../api';
 
 export default (nMessage) => {
@@ -38,7 +39,12 @@ export default (nMessage) => {
             style: 'margin-right: 12px',
             type: 'info',
             size: 'small',
-            onClick: () => console.log('click 编辑')
+            onClick: () => {
+              router.push({
+                name: 'UpdateArticle',
+                query: { id: row.id }
+              });
+            }
           }, { default:() => '编辑' }),
           h(NButton, {
             ghost: true,
