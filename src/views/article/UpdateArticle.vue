@@ -13,7 +13,7 @@
         ></n-select>
       </n-form-item>
       <n-form-item>
-        <n-button type="primary" @click="update">更新</n-button>
+        <n-button :disabled="loading" type="primary" @click="update">更新</n-button>
       </n-form-item>
     </n-form>
     <markdown-editor :data="originData" style="height: 600px;" @data-change="handleDataChange" />
@@ -30,7 +30,7 @@ import {
   useMessage,
   useDialog,
 } from 'naive-ui';
-import { onBeforeMount, reactive, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
 import api from '../../api';
@@ -129,13 +129,23 @@ onBeforeMount(async () => {
   }
 });
 
+const loading = ref(false);
+
 // 更新文章
 const update = async () => {
-  const data = await api.article.update(articleId, article.title, article.content, formValue.categoryId);
-  if (data.code === 0) {
-    nMessage.success(data.msg);
-    isChanged = true;
-    router.push({ name: 'ArticleList' });
+  if (!loading.value) {
+    loading.value = true;
+    const msgReactive = nMessage.loading("更新中，请稍等...", {
+      duration: 0
+    });
+    const data = await api.article.update(articleId, article.title, article.content, formValue.categoryId);
+    if (data.code === 0) {
+      nMessage.success(data.msg);
+      isChanged = true;
+      router.push({ name: 'ArticleList' });
+    }
+    msgReactive.destroy();
+    loading.value = false;
   }
 }
 

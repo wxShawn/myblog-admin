@@ -14,7 +14,7 @@
         ></n-select>
       </n-form-item>
       <n-form-item>
-        <n-button type="primary" @click="create">上传</n-button>
+        <n-button :disabled="loading" type="primary" @click="create">上传</n-button>
       </n-form-item>
     </n-form>
     <markdown-editor style="height: 600px;" @data-change="handleDataChange" />
@@ -123,19 +123,29 @@ onBeforeMount(() => {
   getCategoryList();
 });
 
+const loading = ref(false);
+
 // 创建文章
 const create = async () => {
-  try {
-    await formRef.value.validate();
-  } catch (error) {
-    console.warn(error);
-    return false;
-  }
-  const data = await api.article.create(article.title, article.content, formValue.categoryId);
-  if (data.code === 0) {
-    nMessage.success(data.msg);
-    isChanged = true;
-    router.push({ name: 'ArticleList' });
+  if (!loading.value) {
+    loading.value = true;
+    const msgReactive = nMessage.loading("创建中，请稍等...", {
+      duration: 0
+    });
+    try {
+      await formRef.value.validate();
+    } catch (error) {
+      console.warn(error);
+      return false;
+    }
+    const data = await api.article.create(article.title, article.content, formValue.categoryId);
+    if (data.code === 0) {
+      nMessage.success(data.msg);
+      isChanged = true;
+      router.push({ name: 'ArticleList' });
+    }
+    msgReactive.destroy();
+    loading.value = false;
   }
 }
 
