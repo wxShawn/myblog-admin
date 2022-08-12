@@ -49,6 +49,7 @@ import {
   NButton,
   NDataTable,
   useMessage,
+  useDialog,
 } from 'naive-ui';
 
 import router from '../../router';
@@ -56,6 +57,7 @@ import useArticlesSearchForm from './hooks/useArticlesSearchForm';
 import useArticlesDataTable from './hooks/useArticlesDataTable';
 
 const nMessage = useMessage();
+const nDialog = useDialog();
 
 /**
  * 博客筛选表单
@@ -73,9 +75,19 @@ const searchClickHandle = () => {
 /**
  * 博客列表
  */
-const dataTable = useArticlesDataTable(nMessage);
+const dataTable = useArticlesDataTable(nMessage, nDialog);
 
-// 分页事件触发
+// 表格编辑事件
+dataTable.action.edit = () => {
+
+}
+
+// 表格删除事件
+dataTable.action.edit = () => {
+  
+}
+
+// 分页改变事件触发
 dataTable.paginationAction.change = () => {
   searchForm.search(async (title, categoryId) => {
     // 获取新数据

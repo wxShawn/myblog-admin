@@ -3,7 +3,14 @@ import { NButton, NSwitch } from "naive-ui";
 import router from '../../../router';
 import api from '../../../api';
 
-export default (nMessage) => {
+export default (nMessage, nDialog) => {
+
+  // 表格操作事件，暴露给外部使用
+  const action = reactive({
+    edit() {},
+    delete() {}
+  });
+
   // 表头
   const columns = [
     { title: '#', key: 'index' },
@@ -50,17 +57,43 @@ export default (nMessage) => {
             ghost: true,
             type: 'error',
             size: 'small',
-            onClick: async () => {
-              const data = await api.article.delete(row.id);
-              if (data.code === 0) {
-                nMessage.success(data.msg);
-              }
+            onClick: () => {
+              deleteArticle(row.id);
             }
           }, { default:() => '删除' }),
         ];
       }
     }
   ];
+
+  // 删除文章
+  const deleteArticle = (id) => {
+    let disabled = false; // 节流
+    nDialog.warning({
+      title: "警告",
+      content: "该操作不可逆，确认删除？",
+      positiveText: "确认删除",
+      negativeText: "考虑一下",
+      onPositiveClick: async () => {
+        if (!disabled) {
+          disabled = true;
+          const msgReactive = nMessage.loading("删除中，请稍等...", {
+            duration: 0
+          });
+          const data = await api.article.delete(id);
+          if (data.code === 0) {
+            nMessage.success(data.msg);
+            getData();
+          }
+          msgReactive.destroy();
+          disabled = false;
+        }
+      },
+      onNegativeClick: () => {
+        // nothing
+      }
+    });
+  }
 
   // 数据
   const articleData = reactive([]);
@@ -136,5 +169,6 @@ export default (nMessage) => {
     getData,
     paginationAction,
     loading,
+    action,
   }
 }
