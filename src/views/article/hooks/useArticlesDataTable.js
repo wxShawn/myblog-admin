@@ -98,26 +98,30 @@ export default (nMessage) => {
 
   // 获取数据
   const getData = async (title, categoryId) => {
-    const { page, pageSize } = pagination;
-    const data = await api.article.findAll(page, pageSize, title, categoryId);
-    if (data.code === 0) {
-      const { count, rows } = data.result;
-      pagination.itemCount = count;
-      articleData.length = 0;
-      for (let i = 0, len = rows.length; i < len; i++) {
-        const createdAt = new Date(rows[i].createdAt).toLocaleString();
-        const updatedAt = new Date(rows[i].updatedAt).toLocaleString();
-        articleData.push({
-          index: (page - 1) * pageSize + i + 1, 
-          id: rows[i].id,
-          title: rows[i].title,
-          category: rows[i].blog_category.name,
-          pageviews: 99,
-          createdAt,
-          updatedAt,
-          isPublish: rows[i].isPublish,
-        });
+    if (!loading.value) {
+      loading.value = true;
+      const { page, pageSize } = pagination;
+      const data = await api.article.findAll(page, pageSize, title, categoryId);
+      if (data.code === 0) {
+        const { count, rows } = data.result;
+        pagination.itemCount = count;
+        articleData.length = 0;
+        for (let i = 0, len = rows.length; i < len; i++) {
+          const createdAt = new Date(rows[i].createdAt).toLocaleString();
+          const updatedAt = new Date(rows[i].updatedAt).toLocaleString();
+          articleData.push({
+            index: (page - 1) * pageSize + i + 1, 
+            id: rows[i].id,
+            title: rows[i].title,
+            category: rows[i].blog_category.name,
+            pageviews: 99,
+            createdAt,
+            updatedAt,
+            isPublish: rows[i].isPublish,
+          });
+        }
       }
+      loading.value = false;
     }
   }
 

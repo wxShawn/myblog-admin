@@ -19,7 +19,7 @@
       </n-form-item>
       <n-form-item>
         <n-button style="margin-right: 18px;" @click="searchForm.reset">重置</n-button>
-        <n-button type="info" @click="searchClickHandle">查询</n-button>
+        <n-button :disabled="dataTable.loading.value" type="info" @click="searchClickHandle">查询</n-button>
       </n-form-item>
       <n-form-item>
         <n-button type="primary" @click="goToCreateArticle">添加文章</n-button>
@@ -64,14 +64,10 @@ const searchFormRef = ref(null);
 const searchForm = useArticlesSearchForm(searchFormRef);
 // 查询按钮点击
 const searchClickHandle = () => {
-  if (!dataTable.loading.value) {
-    dataTable.loading.value = true;
-    searchForm.search(async (title, categoryId) => {
-      // 获取新数据
-      await dataTable.getData(title, categoryId);
-      dataTable.loading.value = false;
-    });
-  }
+  searchForm.search(async (title, categoryId) => {
+    // 获取新数据
+    await dataTable.getData(title, categoryId);
+  });
 }
 
 /**
@@ -81,14 +77,10 @@ const dataTable = useArticlesDataTable(nMessage);
 
 // 分页事件触发
 dataTable.paginationAction.change = () => {
-  if (!dataTable.loading.value) {
-    dataTable.loading.value = true;
-    searchForm.search(async (title, categoryId) => {
-      // 获取新数据
-      await dataTable.getData(title, categoryId);
-      dataTable.loading.value = false;
-    });
-  }
+  searchForm.search(async (title, categoryId) => {
+    // 获取新数据
+    await dataTable.getData(title, categoryId);
+  });
 }
 
 /**
