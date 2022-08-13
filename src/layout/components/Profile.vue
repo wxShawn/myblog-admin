@@ -160,6 +160,7 @@ const editFormRules = {
       if (typeof value != 'string') return new Error('名称格式错误');
       return true;
     },
+    trigger: 'blur'
   },
   email: {
     required: true,
@@ -169,6 +170,7 @@ const editFormRules = {
       if (errorList.length > 0) return new Error('邮箱格式错误');
       return true;
     },
+    trigger: 'blur'
   }
 }
 let updateDisabled = false; // 节流
