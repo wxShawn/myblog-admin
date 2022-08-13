@@ -75,19 +75,58 @@ const searchClickHandle = () => {
 /**
  * 博客列表
  */
-const dataTable = useArticlesDataTable(nMessage, nDialog);
+const dataTable = useArticlesDataTable();
+
+// 表格文章状态更新事件
+dataTable.action.publish = async (id, value) => {
+  const data = await dataTable.updatePublishState(id, value);
+  if (data.code === 0) {
+    nMessage.success(data.msg);
+  }
+}
 
 // 表格编辑事件
-dataTable.action.edit = () => {
-
+dataTable.action.edit = (id) => {
+  // 进入编辑页面
+  router.push({
+    name: 'UpdateArticle',
+    query: { id }
+  });
 }
 
 // 表格删除事件
-dataTable.action.edit = () => {
-  
+dataTable.action.delete = (id) => {
+  let disabled = false; // 节流
+  nDialog.warning({
+    title: "警告",
+    content: "该操作不可逆，确认删除？",
+    positiveText: "确认删除",
+    negativeText: "考虑一下",
+    onPositiveClick: async () => {
+      if (!disabled) {
+        disabled = true;
+        const msgReactive = nMessage.loading("删除中，请稍等...", {
+          duration: 0
+        });
+        const data = await dataTable.deleteArticle(id);
+        if (data.code === 0) {
+          nMessage.success(data.msg);
+          searchForm.search(async (title, categoryId) => {
+            // 获取新数据
+            await dataTable.getData(title, categoryId);
+          });
+        }
+        msgReactive.destroy();
+        disabled = false;
+      }
+    },
+    onNegativeClick: () => {
+      // nothing
+    }
+  });
 }
 
-// 分页改变事件触发
+// 分页改变事件
 dataTable.paginationAction.change = () => {
   searchForm.search(async (title, categoryId) => {
     // 获取新数据
