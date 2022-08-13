@@ -19,27 +19,46 @@ export default () => {
             style: 'margin-right: 12px',
             type: 'info',
             size: 'small',
-            onClick: () => console.log('click 编辑')
+            onClick: () => action.edit(row.id, row.name)
           }, { default:() => '编辑' }),
           h(NButton, {
             ghost: true,
             type: 'error',
             size: 'small',
-            onClick: () => console.log('click 删除')
+            disabled: row.articleCount != 0,
+            onClick: () => action.delete(row.id)
           }, { default:() => '删除' }),
         ];
       }
     }
   ];
+
+  // 列表事件
+  const action = {
+    edit: (id, name) => console.log('click edit', { id, name }),
+    delete: (id) => console.log('click delete', { id }),
+  }
   
   // 分类列表数据
   const categoryData = reactive([]);
 
   // 文章总数
   const articleTotalCount = ref(0);
-
+  
+  // 列表加载状态
   const loading = ref(false);
 
+  // 更新分类
+  const updateCategory = async (id, name) => {
+    return await api.category.update(id, name);
+  }
+
+  // 删除分类
+  const deleteCategory = async (id) => {
+    return await api.category.delete(id);
+  }
+
+  // 获取文章数据
   const getData = async (title) => {
     if (!loading.value) {
       loading.value = true;
@@ -68,11 +87,13 @@ export default () => {
     }
   }
 
-  // 分页事件，暴露给外部使用
-  const paginationAction = reactive({
-    change() {},
+  onBeforeMount(() => {
+    getData();
   });
 
+  /**
+   * ********** 分页 **********
+   */
   // 分页
   const pagination = reactive({
     page: 1,
@@ -96,8 +117,9 @@ export default () => {
     }
   });
 
-  onBeforeMount(() => {
-    getData();
+  // 分页事件，暴露给外部使用
+  const paginationAction = reactive({
+    change() {},
   });
 
   return {
@@ -105,6 +127,9 @@ export default () => {
     categoryData,
     pagination,
     getData,
+    updateCategory,
+    deleteCategory,
+    action,
     paginationAction,
     loading,
   }
