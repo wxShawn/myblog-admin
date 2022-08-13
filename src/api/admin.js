@@ -37,4 +37,21 @@ export default {
       params: { email },
     });
   },
+
+  // 获取个人信息
+  getPersonalInfo() {
+    return request({
+      method: 'get',
+      url: `${prefix}`,
+    });
+  },
+
+  // 更新个人信息
+  updatePersonalInfo(name, email) {
+    return request({
+      method: 'put',
+      url: `${prefix}`,
+      data: { name, email },
+    });
+  },
 }
