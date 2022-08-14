@@ -11,11 +11,14 @@
     >
       <!-- 菜单 -->
       <n-menu
+        ref="menuRef"
         accordion
         :options="menuOptions"
         :collapsed="collapsed"
         :collapsed-width="60"
         :collapsed-icon-size="22"
+        v-model:value="selectedKey"
+        @update:value="saveMenuKey"
       ></n-menu>
     </n-layout-sider>
     <n-layout>
@@ -67,8 +70,8 @@
 </template>
 
 <script setup>
-import { h, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { h, onBeforeMount, ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import {
   NLayout,
   NLayoutSider,
@@ -115,44 +118,81 @@ const renderLink = (linkTitle, routerName) => {
 const menuOptions = [
   {
     label: '文章管理',
-    key: 'articles',
+    key: 'Articles',
     icon: renderIcon(ArticleOutlined),
     children: [
       {
         label: renderLink('文章列表', 'ArticleList'),
-        key: 'articleList',
+        key: 'ArticleList',
         icon: renderIcon(ListAltOutlined),
       },
       {
         label: renderLink('文章分类', 'ArticleCategory'),
-        key: 'articleCategory',
+        key: 'ArticleCategory',
         icon: renderIcon(ClassOutlined),
       }
     ]
   },
   {
     label: '媒体管理',
-    key: 'media',
+    key: 'Media',
     icon: renderIcon(PermMediaOutlined),
     children: [
       {
         label: renderLink('图片列表', 'ImageList'),
-        key: 'imageList',
+        key: 'ImageList',
         icon: renderIcon(ImageOutlined),
       },
       {
         label: renderLink('音频列表', 'AudioList'),
-        key: 'audioList',
+        key: 'AudioList',
         icon: renderIcon(AudioFileOutlined),
       },
       {
         label: renderLink('视频列表', 'VideoList'),
-        key: 'videoList',
+        key: 'VideoList',
         icon: renderIcon(VideoFileOutlined),
       }
     ]
   }
 ];
+
+// 菜单标识
+const menuRef = ref(null);
+
+// 菜单当前选中值
+const selectedKey = ref('ArticleList');
+
+// 保存菜单当前选中值
+const saveMenuKey = (key) => {
+  sessionStorage.setItem('menuKey', key);
+}
+
+// 设置菜单当前选中值
+const setMenuKey = (key) => {
+  selectedKey.value = key;
+  menuRef.value?.showOption(key);
+}
+
+// 组件挂载前获取
+onBeforeMount(() => {
+  const key = sessionStorage.getItem('menuKey');
+  if (key) setMenuKey(key);
+});
+
+// 路由改变时选中对应菜单选项
+const route = useRoute();
+watch(route, () => {
+  const name = route.matched[1].name;
+  switch (name) {
+    case 'CreateArticle' || 'UpdateArticle':
+      setMenuKey('ArticleList');
+      break;
+    default:
+      setMenuKey(name);
+      break;
+  }
+}, {deep: true})
 
 </script>
 
