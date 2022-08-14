@@ -81,6 +81,7 @@ import {
   NMenu,
   NIcon,
   NButton,
+  useMessage,
 } from 'naive-ui';
 import {
   ArticleOutlined,
@@ -96,6 +97,8 @@ import {
 import Breadcrumb from './components/Breadcrumb.vue';
 import Profile from './components/Profile.vue';
 import Fullscreen from './components/Fullscreen.vue';
+
+window.$message = useMessage();
 
 // 折叠菜单
 const collapsed = ref(false);
@@ -183,14 +186,16 @@ onBeforeMount(() => {
 // 路由改变时选中对应菜单选项
 const route = useRoute();
 watch(route, () => {
-  const name = route.matched[1].name;
-  switch (name) {
-    case 'CreateArticle' || 'UpdateArticle':
-      setMenuKey('ArticleList');
-      break;
-    default:
-      setMenuKey(name);
-      break;
+  if (route.name != 'Login') {
+    const name = route.name;
+    switch (name) {
+      case 'CreateArticle' || 'UpdateArticle':
+        setMenuKey('ArticleList');
+        break;
+      default:
+        setMenuKey(name);
+        break;
+    }
   }
 }, {deep: true})
 
