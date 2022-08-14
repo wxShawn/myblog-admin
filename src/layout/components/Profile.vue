@@ -41,7 +41,7 @@
       </n-form-item>
     </n-form>
     <template #action>
-      <n-button>取消</n-button>
+      <n-button @click="showEditFormModal = false">取消</n-button>
       <n-button type="primary" @click="handleUpdateClick">更新</n-button>
     </template>
   </n-modal>
