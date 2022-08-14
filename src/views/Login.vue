@@ -128,6 +128,7 @@ import { pwdLoginForm, vcLoginForm } from './useLoginForm';
 
 // naive ui 消息组件
 const nMessage = useMessage();
+window.$message = nMessage;
 
 // 登录成功
 const loginSuccess = (data) => {

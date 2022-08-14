@@ -30,22 +30,18 @@ request.interceptors.response.use(function (response) {
   }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
-    const { status } = error.response;
-    const { msg } = error.response.data;
+    const { status = 500 } = error.response;
+    const { msg = '响应异常' } = error.response.data;
 
     switch (status) {
       case 401: // 401 身份未认证或身份认证未通过
         router.push({ name: 'Login' });
         break;
-      case 500: // 服务器错误
-        console.error(msg);
-        // window.$message.error(msg);
-        break;
       default:
-        console.warn(msg);
-        // window.$message.error(msg);
         break;
     }
+    console.error(msg);
+    window.$message.error(msg);
     return error.response;
   }
 );
