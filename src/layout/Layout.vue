@@ -191,7 +191,6 @@ watch(route, () => {
     switch (name) {
       case 'CreateArticle': case 'UpdateArticle':
         setMenuKey('ArticleList');
-        console.log(selectedKey);
         break;
       default:
         setMenuKey(name);
