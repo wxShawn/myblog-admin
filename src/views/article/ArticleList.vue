@@ -1,5 +1,5 @@
 <template>
-  <n-card>
+  <n-card v-if="showFatherPage">
     <n-form
       ref="searchFormRef"
       inline
@@ -35,11 +35,11 @@
     ></n-data-table>
   </n-card>
 
-  
+  <router-view></router-view>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import {
   NCard,
   NForm,
@@ -58,6 +58,15 @@ import useArticlesDataTable from './hooks/useArticlesDataTable';
 
 const nMessage = useMessage();
 const nDialog = useDialog();
+
+// 进入子页面时不显示父页面的内容
+const showFatherPage = computed(() => {
+  if (router.currentRoute.value.name === 'ArticleList') {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 /**
  * 博客筛选表单

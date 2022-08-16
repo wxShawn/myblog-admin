@@ -189,8 +189,9 @@ watch(route, () => {
   if (route.name != 'Login') {
     const name = route.name;
     switch (name) {
-      case 'CreateArticle' || 'UpdateArticle':
+      case 'CreateArticle': case 'UpdateArticle':
         setMenuKey('ArticleList');
+        console.log(selectedKey);
         break;
       default:
         setMenuKey(name);
