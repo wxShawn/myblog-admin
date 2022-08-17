@@ -17,34 +17,36 @@
         </n-form-item>
       </n-form>
     </n-card>
-
-    <n-grid v-if="imageList.length > 0" x-gap="12" y-gap="12" cols="m:3 l:4 xl:6" responsive="screen">
-      <n-gi v-for="img in imageList" :key="img">
-        <n-card class="image-card" content-style="padding: 5px" hoverable>
-          <img class="cover" :src="img.url" :alt="img.title">
-          <!-- 删除 -->
-          <n-button
-            class="delete-btn"
-            size="tiny"
-            @click="handleDeleteMedia(img.id)"
-          >
-            <n-icon><delete-forever-filled /></n-icon>
-          </n-button>
-          <!-- 编辑 -->
-          <n-button 
-            class="edit-btn"
-            size="tiny"
-            @click="handleEditOpen(img.id, img.name, img.url)"
-          >
-            <n-icon><edit-round /></n-icon>
-          </n-button>
-          <div class="info">
-            <div><b>{{ img.name }}</b></div>
-            <div style="color: #aaa; font-size: 12px">{{ img.size }}</div>
-          </div>
-        </n-card>
-      </n-gi>
-    </n-grid>
+    <n-spin v-if="imageList.length > 0" size="large" :show="loading">
+      <n-grid x-gap="12" y-gap="12" cols="m:3 l:4 xl:6" responsive="screen">
+        <n-gi v-for="img in imageList" :key="img">
+          <n-card class="image-card" content-style="padding: 5px" hoverable>
+            <img class="cover" :src="img.url" :alt="img.title">
+            <!-- 删除 -->
+            <n-button
+              class="delete-btn"
+              size="tiny"
+              @click="handleDeleteMedia(img.id)"
+            >
+              <n-icon><delete-forever-filled /></n-icon>
+            </n-button>
+            <!-- 编辑 -->
+            <n-button 
+              class="edit-btn"
+              size="tiny"
+              @click="handleEditOpen(img.id, img.name, img.url)"
+            >
+              <n-icon><edit-round /></n-icon>
+            </n-button>
+            <div class="info">
+              <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>{{ img.name }}</b></div>
+              <div style="color: #aaa; font-size: 12px">{{ img.size }}</div>
+            </div>
+          </n-card>
+        </n-gi>
+      </n-grid>
+    </n-spin>
+    <!-- 无数据时显示 -->
     <div v-else style="text-align: center;">
       <n-icon :depth="5" :size="40"><image-search-filled /></n-icon>
       <div style="color: #ccc;">No Image</div>
@@ -52,6 +54,7 @@
     <!-- 分页 -->
     <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
       <n-pagination
+        :disabled="loading"
         v-model:page="pagination.page"
         v-model:page-size="pagination.pageSize"
         :page-count="pagination.pageCount"
@@ -119,6 +122,7 @@ import {
   useMessage,
   useDialog,
   NPagination,
+  NSpin,
 } from 'naive-ui';
 import {
   EditRound,
@@ -141,6 +145,7 @@ const searchFormRef = ref(null);
 const searchFormValue = reactive({ name: '' });
 // 查询
 const handelSearchClick = () => {
+  console.log(pagination.page, pagination.pageSize);
   getData(); // 刷新数据
 }
 
@@ -217,8 +222,11 @@ const handleUpdateMedia = async () => {
  */
 // 图片列表
 const imageList = reactive([]);
+// 加载中
+const loading = ref(false);
 // 获取图片列表
 const getData = async () => {
+  loading.value = true;
   const { page, pageSize } = pagination;
   const { name } = searchFormValue;
   const data = await api.media.findAllImage(page, pageSize, name);
@@ -235,6 +243,7 @@ const getData = async () => {
       imageList.push({ id, url, name, size });
     }
   }
+  loading.value = false;
 }
 onBeforeMount(() => {
   // 刷新数据
@@ -259,6 +268,12 @@ const pagination = reactive({
 const updatePagination = (total) => {
   pagination.total = total;
   pagination.pageCount = Math.ceil(total / pagination.pageSize);
+  // 分页总数小于当前页时，将当前页设置为最后一页，并刷新数据
+  if (pagination.page > pagination.pageCount){
+    pagination.page = pagination.pageCount;
+    // 刷新数据
+    getData();
+  }
 }
 // 分页改变时
 const handlePageChange = () => {
@@ -267,7 +282,6 @@ const handlePageChange = () => {
 }
 // 分页大小改变时
 const handlePageSizeChange = () => {
-  pagination.page = 1;
   // 刷新数据
   getData();
 }
