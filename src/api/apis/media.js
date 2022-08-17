@@ -2,16 +2,32 @@ import request from "../request";
 
 const prefix = '/media';
 export default {
-  upload(fileList) {
+  upload(fileList, onUploadCallback) {
     return request({
       headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: progressEvent => { onUploadCallback(progressEvent) },
       method: 'post',
       url: `${prefix}`,
       data: fileList,
     });
   },
 
-  findAll(page, pageSize, name) {
+  delete(id) {
+    return request({
+      method: 'delete',
+      url: `${prefix}/${id}`,
+    });
+  },
+
+  update(id, name) {
+    return request({
+      method: 'put',
+      url: `${prefix}/${id}`,
+      data: { name },
+    });
+  },
+
+  findAllImage(page, pageSize, name) {
     return request({
       method: 'get',
       url: `${prefix}`,
