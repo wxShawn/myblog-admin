@@ -33,5 +33,21 @@ export default {
       url: `${prefix}`,
       params: { type: 'image', page, pageSize, name }
     });
-  }
+  },
+
+  findAllAudio(page, pageSize, name) {
+    return request({
+      method: 'get',
+      url: `${prefix}`,
+      params: { type: 'audio', page, pageSize, name }
+    });
+  },
+
+  findAllVideo(page, pageSize, name) {
+    return request({
+      method: 'get',
+      url: `${prefix}`,
+      params: { type: 'video', page, pageSize, name }
+    });
+  },
 }

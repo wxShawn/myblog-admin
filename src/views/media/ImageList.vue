@@ -21,7 +21,7 @@
       <n-grid x-gap="12" y-gap="12" cols="m:3 l:4 xl:6" responsive="screen">
         <n-gi v-for="img in imageList" :key="img">
           <n-card class="image-card" content-style="padding: 5px" hoverable>
-            <img class="cover" :src="img.url" :alt="img.title">
+            <img class="cover" :src="img.url" :alt="img.title" />
             <!-- 删除 -->
             <n-button
               class="delete-btn"
@@ -123,6 +123,7 @@ import {
   useDialog,
   NPagination,
   NSpin,
+  NImage,
 } from 'naive-ui';
 import {
   EditRound,
