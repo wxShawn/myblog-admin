@@ -37,17 +37,17 @@
   </n-modal>
 
   <!-- 编辑 -->
-  <n-modal v-model:show="showEditModal" preset="dialog" title="图片">
+  <n-modal v-model:show="showEditModal" preset="dialog" title="音频">
     <n-form
       ref="editFormRef"
       style="margin-top: 30px;"
       label-placement="left"
       :model="editFormValue"
     >
-      <n-form-item label="图片名称">
+      <n-form-item label="音频名称">
         <n-input v-model:value="editFormValue.name" />
       </n-form-item>
-      <n-form-item label="图片地址">
+      <n-form-item label="音频地址">
         <n-input :value="editFormValue.url" disabled />
         <n-button style="margin-left: 20px;" @click="handleCopeUrl">复制</n-button>
       </n-form-item>

@@ -253,7 +253,7 @@ const pagination = reactive({
   pageSizes: [{ label: '10/页', value: 10 }, { label: '20/页', value: 20 }, { label: '30/页', value: 30 }],
   // slot 分页前缀
   prefix() {
-    return `共 ${pagination.itemCount} 个音频文件`;
+    return `共 ${pagination.itemCount} 个视频文件`;
   },
   // 切换页时触发
   onChange(page) {
