@@ -16,6 +16,7 @@
       </n-form-item>
     </n-form>
     <n-data-table
+      remote
       :columns="columns"
       :data="videoList"
       :pagination="pagination"
@@ -87,6 +88,7 @@ const nDialog = useDialog();
 const searchFormRef = ref(null);
 const searchFormValue = reactive({ name: '' });
 const handleSearch = () => {
+  pagination.page = 1;
   getData();
 }
 

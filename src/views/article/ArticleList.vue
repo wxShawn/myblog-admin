@@ -76,6 +76,7 @@ const searchForm = useArticlesSearchForm(searchFormRef);
 // 查询按钮点击
 const searchClickHandle = () => {
   searchForm.search(async (title, categoryId) => {
+    dataTable.pagination.page = 1;
     // 获取新数据
     await dataTable.getData(title, categoryId);
   });
