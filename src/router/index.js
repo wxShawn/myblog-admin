@@ -75,6 +75,21 @@ const routes = [
     ],
   },
   {
+    path: '/project',
+    name: 'Project',
+    component: () => import('../layout/Layout.vue'),
+    meta: { title: '项目Demo' },
+    redirect: { name: 'ProjectList' },
+    children: [
+      {
+        path: 'priject-list',
+        name: 'ProjectList',
+        component: () => import('../views/project/ProjectList.vue'),
+        meta: { title: '项目列表' },
+      }
+    ]
+  },
+  {
     path: '/404',
     name: 'PageNotFound',
     component: () => import('../views/404.vue'),

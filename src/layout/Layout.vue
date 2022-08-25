@@ -92,6 +92,8 @@ import {
   AudioFileOutlined,
   VideoFileOutlined,
   MenuFilled,
+  AppsOutlined,
+  AutoAwesomeMotionOutlined,
 } from '@vicons/material';
 
 import Breadcrumb from './components/Breadcrumb.vue';
@@ -155,6 +157,18 @@ const menuOptions = [
         label: renderLink('视频列表', 'VideoList'),
         key: 'VideoList',
         icon: renderIcon(VideoFileOutlined),
+      }
+    ]
+  },
+  {
+    label: '项目Demo',
+    key: 'Project',
+    icon: renderIcon(AppsOutlined),
+    children: [
+      {
+        label: renderLink('项目列表', 'ProjectList'),
+        key: 'ProjectList',
+        icon: renderIcon(AutoAwesomeMotionOutlined),
       }
     ]
   }

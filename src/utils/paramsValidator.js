@@ -35,14 +35,6 @@ class ParamsValidator {
     title: {
       type: 'string',
     },
-    // 文本内容
-    content: {
-      type: 'string',
-    },
-    // 是否发布
-    isPublish: {
-      type: 'boolean',
-    },
     // 分类名称
     categoryName: {
       type: 'string',
@@ -69,6 +61,19 @@ class ParamsValidator {
     pageSize: {
       type: 'number',
       min: 1,
+    },
+    // 文本内容
+    content: {
+      type: 'string',
+    },
+    // 是否发布
+    isPublish: {
+      type: 'boolean',
+    },
+    // 网址
+    url: {
+      type: 'string',
+      pattern: /[a-zA-z]+:\/\/[^\s]*/,
     }
   }
   
