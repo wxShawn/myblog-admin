@@ -2,6 +2,11 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
@@ -109,7 +114,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   // 检查 json web token 是否存在，否则跳转到 Login 页面
   const jwt = sessionStorage.getItem('jwt');
-  if (to.name !== 'Login' && !jwt) {
+  if (!(to.name === 'Login' || to.name === 'Register') && !jwt) {
     return {name: 'Login'};
   }
 });
