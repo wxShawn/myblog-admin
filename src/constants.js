@@ -1,3 +1,3 @@
 export default {
-  REQUEST_URL: 'http://127.0.0.1:3001',
+  REQUEST_URL: 'http://47.100.229.144:3001',
 }
