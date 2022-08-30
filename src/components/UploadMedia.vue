@@ -9,7 +9,7 @@
         <n-upload-trigger #="{ handleClick }" abstract>
           <n-button @click="handleClick">点击添加文件</n-button>
         </n-upload-trigger>
-        <n-button @click="handleUpload">上传</n-button>
+        <n-button :disabled="keyList.length === 0" @click="handleUpload">上传</n-button>
       </n-button-group>
       <div v-show="showPercentage" style="margin-top: 20px;">
         <n-progress
@@ -46,7 +46,7 @@ import {
   NScrollbar,
   NProgress,
 } from 'naive-ui';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import api from '../api';
 
 // 消息
@@ -57,27 +57,26 @@ const emit = defineEmits(['success']);
 
 // 将要上传的文件列表
 const uploadFileList = new FormData();
+// 将要上传的文件列表key
+let keyList = reactive([]);
 
 // 上传进度
 const showPercentage = ref(false);
 const uploadPercentage = ref(0);
 
 // 文件变化时
-const handleChange = (() => {
-  let keyList = [];
-  return ({ fileList }) => {
-    // 初始化文件列表
-    for (const key of keyList) {
-      uploadFileList.delete(key);
-    }
-    keyList.length = 0;
-    // 加入新的文件
-    for (let i = 0; i < fileList.length; i++) {
-      uploadFileList.append(`file${i}`, fileList[i].file);
-      keyList.push(`file${i}`);
-    }
+const handleChange = ({ fileList }) => {
+  // 初始化文件列表
+  for (const key of keyList) {
+    uploadFileList.delete(key);
   }
-})();
+  keyList.length = 0;
+  // 加入新的文件
+  for (let i = 0; i < fileList.length; i++) {
+    uploadFileList.append(`file${i}`, fileList[i].file);
+    keyList.push(`file${i}`);
+  }
+};
 
 // 上传文件
 const handleUpload = async () => {
