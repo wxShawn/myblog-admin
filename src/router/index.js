@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import Layout from '../layout/Layout.vue';
 
 const routes = [
   {
@@ -19,7 +20,7 @@ const routes = [
   {
     path: '/article',
     name: 'Article',
-    component: () => import('../layout/Layout.vue'),
+    component: Layout,
     redirect: { name: 'ArticleList' },
     meta: { title: '文章管理' },
     children: [
@@ -55,7 +56,7 @@ const routes = [
   {
     path: '/media',
     name: 'Media',
-    component: () => import('../layout/Layout.vue'),
+    component: Layout,
     redirect: { name: 'ImageList' },
     meta: { title: '媒体管理' },
     children: [
@@ -88,7 +89,7 @@ const routes = [
   {
     path: '/project',
     name: 'Project',
-    component: () => import('../layout/Layout.vue'),
+    component: Layout,
     meta: { title: '项目Demo' },
     redirect: { name: 'ProjectList' },
     children: [
