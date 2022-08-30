@@ -224,7 +224,7 @@ const getData = async () => {
     for (let i = 0, len = rows.length; i < len; i++) {
       const id = rows[i].id;
       const name = rows[i].name;
-      const url = `${constants.REQUEST_URL}/${rows[i].path.split('uploads\\', 2)[1]}`;
+      const url = `${constants.REQUEST_URL}/${rows[i].path.split('uploads/', 2)[1]}`;
       const size = rows[i].size > 1024*1024 ? (rows[i].size/1024/1024).toFixed(2) + ' MB' : (rows[i].size/1024).toFixed(2) + ' KB';
       const createdAt = new Date(rows[i].createdAt).toLocaleString();
       const updatedAt = new Date(rows[i].updatedAt).toLocaleString();

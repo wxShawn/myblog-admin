@@ -123,7 +123,6 @@ import {
   useDialog,
   NPagination,
   NSpin,
-  NImage,
 } from 'naive-ui';
 import {
   EditRound,
@@ -238,7 +237,7 @@ const getData = async () => {
     const { rows } = data.result
     for (let i = 0, len = rows.length; i < len; i++) {
       const id = rows[i].id;
-      const url = `${constants.REQUEST_URL}/${rows[i].path.split('uploads\\', 2)[1]}`;
+      const url = `${constants.REQUEST_URL}/${rows[i].path.split('uploads/', 2)[1]}`;
       const name = rows[i].name;
       const size = rows[i].size > 1024*1024 ? (rows[i].size/1024/1024).toFixed(2) + ' MB' : (rows[i].size/1024).toFixed(2) + ' KB';
       imageList.push({ id, url, name, size });
@@ -267,6 +266,10 @@ const pagination = reactive({
 });
 // 刷新分页
 const updatePagination = (total) => {
+  // 总数为零时终止函数，防止后面会发送一个page=0的错误请求
+  if (total === 0) {
+    return false;
+  }
   pagination.total = total;
   pagination.pageCount = Math.ceil(total / pagination.pageSize);
   // 分页总数小于当前页时，将当前页设置为最后一页，并刷新数据
