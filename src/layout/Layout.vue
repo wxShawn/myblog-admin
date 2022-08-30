@@ -94,6 +94,7 @@ import {
   MenuFilled,
   AppsOutlined,
   AutoAwesomeMotionOutlined,
+  SyncOutlined,
 } from '@vicons/material';
 
 import Breadcrumb from './components/Breadcrumb.vue';
@@ -157,6 +158,11 @@ const menuOptions = [
         label: renderLink('视频列表', 'VideoList'),
         key: 'VideoList',
         icon: renderIcon(VideoFileOutlined),
+      },
+      {
+        label: renderLink('同步文件', 'SyncMediaFile'),
+        key: 'SyncMediaFile',
+        icon: renderIcon(SyncOutlined),
       }
     ]
   },

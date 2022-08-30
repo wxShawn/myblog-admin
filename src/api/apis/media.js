@@ -50,4 +50,11 @@ export default {
       params: { type: 'video', page, pageSize, name }
     });
   },
+
+  syncMediaFile() {
+    return request({
+      method: 'post',
+      url: `${prefix}/sync-database`,
+    });
+  },
 }

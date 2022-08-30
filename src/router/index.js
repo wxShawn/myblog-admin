@@ -77,6 +77,12 @@ const routes = [
         component: () => import('../views/media/VideoList.vue'),
         meta: { title: '视频列表' },
       },
+      {
+        path: 'sync-media-file',
+        name: 'SyncMediaFile',
+        component: () => import('../views/media/SyncMediaFile.vue'),
+        meta: { title: '同步文件' },
+      },
     ],
   },
   {
