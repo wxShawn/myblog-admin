@@ -3,13 +3,13 @@ import request from "../request";
 const prefix = '/admins';
 export default {
   // 注册
-  // register(name, email, password, roleId) {
-  //   return request({
-  //     method: 'post',
-  //     url: `${prefix}/register`,
-  //     data: { name, email, password, roleId },
-  //   });
-  // },
+  register(name, email, password, roleId) {
+    return request({
+      method: 'post',
+      url: `${prefix}/register`,
+      data: { name, email, password, roleId },
+    });
+  },
 
   // 密码登录
   loginByPassword(email, password) {
