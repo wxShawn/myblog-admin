@@ -6,8 +6,8 @@ import api from '../api';
 export const pwdLoginForm = (formRef) => {
   // 表单信息
   const formValue = reactive({
-    email: '1806394760@qq.com',
-    password: '12345678'
+    email: '',
+    password: ''
   });
   // 表单校验规则
   const rules = {
