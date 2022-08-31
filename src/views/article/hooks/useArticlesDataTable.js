@@ -13,7 +13,7 @@ export default () => {
     { title: '#', key: 'index' },
     { title: '标题', key: 'title' },
     { title: '分类', key: 'category' },
-    { title: '浏览量', key: 'pageviews' },
+    // { title: '浏览量', key: 'pageviews' },
     { title: '创建时间', key: 'createdAt' },
     { title: '更新时间', key: 'updatedAt' },
     {
@@ -94,7 +94,7 @@ export default () => {
             id: rows[i].id,
             title: rows[i].title,
             category: rows[i].blog_category.name,
-            pageviews: 99,
+            // pageviews: 99,
             createdAt,
             updatedAt,
             isPublish: rows[i].isPublish,
