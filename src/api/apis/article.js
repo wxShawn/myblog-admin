@@ -50,7 +50,7 @@ export default {
     return request({
       method: 'get',
       url: `${prefix}`,
-      params: { page, pageSize, title, categoryId },
+      params: { page, pageSize, title, categoryId, includeUnpublished: true },
     });
   },
 }

@@ -37,7 +37,7 @@ export default {
     return request({
       method: 'get',
       url: `${prefix}`,
-      params: { page, pageSize, name }
+      params: { page, pageSize, name, includeUnpublished: true }
     });
   },
 }
